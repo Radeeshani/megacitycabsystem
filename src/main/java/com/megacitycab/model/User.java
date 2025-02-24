@@ -4,7 +4,7 @@ public class User {
     private int userId;
     private String username;
     private String password;
-    private String role; // admin or staff
+    private String role;
 
     // Getters and Setters
     public int getUserId() {

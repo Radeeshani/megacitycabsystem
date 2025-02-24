@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.megacitycab.model.Booking" %>
+<%@ page import="com.megacitycab.model.Bill" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>View Bookings - Mega City Cab</title>
+    <title>View Bills - Mega City Cab</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -105,34 +105,30 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="table-container">
-                    <h2>Booking List</h2>
+                    <h2>Bill List</h2>
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Customer ID</th>
-                                <th>Pickup Location</th>
-                                <th>Destination</th>
-                                <th>Contact Number</th>
-                                <th>Assigned Driver ID</th>
-                                <th>Status</th>
+                                <th>Booking ID</th>
+                                <th>Total Amount</th>
+                                <th>Tax</th>
+                                <th>Discount</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
-                               for (Booking booking : bookings) { %>
+                            <% List<Bill> bills = (List<Bill>) request.getAttribute("bills");
+                               for (Bill bill : bills) { %>
                                 <tr>
-                                    <td><%= booking.getBookingId() %></td>
-                                    <td><%= booking.getCustomerId() %></td>
-                                    <td><%= booking.getPickupLocation() %></td>
-                                    <td><%= booking.getDestination() %></td>
-                                    <td><%= booking.getContactNumber() %></td>
-                                    <td><%= booking.getAssignedDriverId() %></td>
-                                    <td><%= booking.getStatus() %></td>
+                                    <td><%= bill.getBillId() %></td>
+                                    <td><%= bill.getBookingId() %></td>
+                                    <td><%= bill.getTotalAmount() %></td>
+                                    <td><%= bill.getTax() %></td>
+                                    <td><%= bill.getDiscount() %></td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/bookings?action=edit&id=<%= booking.getBookingId() %>" class="btn btn-primary btn-action">Edit</a>
-                                        <a href="${pageContext.request.contextPath}/bookings?action=delete&id=<%= booking.getBookingId() %>" class="btn btn-danger btn-action">Delete</a>
+                                        <a href="${pageContext.request.contextPath}/bills?action=edit&id=<%= bill.getBillId() %>" class="btn btn-primary btn-action">Edit</a>
+                                        <a href="${pageContext.request.contextPath}/bills?action=delete&id=<%= bill.getBillId() %>" class="btn btn-danger btn-action">Delete</a>
                                     </td>
                                 </tr>
                             <% } %>

@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.megacitycab.model.Booking" %>
+<%@ page import="com.megacitycab.model.Driver" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>View Bookings - Mega City Cab</title>
+    <title>View Drivers - Mega City Cab</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -63,35 +63,14 @@
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/drivers">View Drivers</a></li>
                         </ul>
                     </li>
-                    <!-- Manage Cars Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Manage Cars
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/addCar.jsp">Add Car</a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/cars">View Cars</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/cars">Manage Cars</a>
                     </li>
-                    <!-- Manage Bookings Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Manage Bookings
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/addBooking.jsp">Add Booking</a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/bookings">View Bookings</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/bookings">Manage Bookings</a>
                     </li>
-                    <!-- Manage Bills Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Manage Bills
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/addBill.jsp">Add Bill</a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/bills">View Bills</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/bills">Manage Bills</a>
                     </li>
                 </ul>
                 <form action="${pageContext.request.contextPath}/login" method="get" class="d-flex">
@@ -105,34 +84,28 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="table-container">
-                    <h2>Booking List</h2>
+                    <h2>Driver List</h2>
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Customer ID</th>
-                                <th>Pickup Location</th>
-                                <th>Destination</th>
-                                <th>Contact Number</th>
-                                <th>Assigned Driver ID</th>
-                                <th>Status</th>
+                                <th>Name</th>
+                                <th>License Number</th>
+                                <th>Contact</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
-                               for (Booking booking : bookings) { %>
+                            <% List<Driver> drivers = (List<Driver>) request.getAttribute("drivers");
+                               for (Driver driver : drivers) { %>
                                 <tr>
-                                    <td><%= booking.getBookingId() %></td>
-                                    <td><%= booking.getCustomerId() %></td>
-                                    <td><%= booking.getPickupLocation() %></td>
-                                    <td><%= booking.getDestination() %></td>
-                                    <td><%= booking.getContactNumber() %></td>
-                                    <td><%= booking.getAssignedDriverId() %></td>
-                                    <td><%= booking.getStatus() %></td>
+                                    <td><%= driver.getDriverId() %></td>
+                                    <td><%= driver.getName() %></td>
+                                    <td><%= driver.getLicenseNumber() %></td>
+                                    <td><%= driver.getContact() %></td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/bookings?action=edit&id=<%= booking.getBookingId() %>" class="btn btn-primary btn-action">Edit</a>
-                                        <a href="${pageContext.request.contextPath}/bookings?action=delete&id=<%= booking.getBookingId() %>" class="btn btn-danger btn-action">Delete</a>
+                                        <a href="${pageContext.request.contextPath}/drivers?action=edit&id=<%= driver.getDriverId() %>" class="btn btn-primary btn-action">Edit</a>
+                                        <a href="${pageContext.request.contextPath}/drivers?action=delete&id=<%= driver.getDriverId() %>" class="btn btn-danger btn-action">Delete</a>
                                     </td>
                                 </tr>
                             <% } %>

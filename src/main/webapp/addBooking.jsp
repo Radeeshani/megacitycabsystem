@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.megacitycab.model.Booking" %>
-<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>View Bookings - Mega City Cab</title>
+    <title>Add Booking - Mega City Cab</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -17,19 +15,28 @@
         .container {
             margin-top: 2rem;
         }
-        .table-container {
+        .form-container {
             background: #fff;
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .table-container h2 {
+        .form-container h2 {
             margin-bottom: 1.5rem;
             color: #333;
             text-align: center;
         }
-        .btn-action {
-            margin: 0 0.25rem;
+        .btn-submit {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+        .btn-submit:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -83,15 +90,8 @@
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/bookings">View Bookings</a></li>
                         </ul>
                     </li>
-                    <!-- Manage Bills Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Manage Bills
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/addBill.jsp">Add Bill</a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/bills">View Bills</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/bills">Manage Bills</a>
                     </li>
                 </ul>
                 <form action="${pageContext.request.contextPath}/login" method="get" class="d-flex">
@@ -103,41 +103,32 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="table-container">
-                    <h2>Booking List</h2>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Customer ID</th>
-                                <th>Pickup Location</th>
-                                <th>Destination</th>
-                                <th>Contact Number</th>
-                                <th>Assigned Driver ID</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
-                               for (Booking booking : bookings) { %>
-                                <tr>
-                                    <td><%= booking.getBookingId() %></td>
-                                    <td><%= booking.getCustomerId() %></td>
-                                    <td><%= booking.getPickupLocation() %></td>
-                                    <td><%= booking.getDestination() %></td>
-                                    <td><%= booking.getContactNumber() %></td>
-                                    <td><%= booking.getAssignedDriverId() %></td>
-                                    <td><%= booking.getStatus() %></td>
-                                    <td>
-                                        <a href="${pageContext.request.contextPath}/bookings?action=edit&id=<%= booking.getBookingId() %>" class="btn btn-primary btn-action">Edit</a>
-                                        <a href="${pageContext.request.contextPath}/bookings?action=delete&id=<%= booking.getBookingId() %>" class="btn btn-danger btn-action">Delete</a>
-                                    </td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+            <div class="col-md-6">
+                <div class="form-container">
+                    <h2>Add Booking</h2>
+                    <form action="${pageContext.request.contextPath}/bookings" method="post">
+                        <div class="mb-3">
+                            <label for="customerId" class="form-label">Customer ID</label>
+                            <input type="number" class="form-control" id="customerId" name="customerId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="pickupLocation" class="form-label">Pickup Location</label>
+                            <input type="text" class="form-control" id="pickupLocation" name="pickupLocation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="destination" class="form-label">Destination</label>
+                            <input type="text" class="form-control" id="destination" name="destination" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contactNumber" class="form-label">Contact Number</label>
+                            <input type="text" class="form-control" id="contactNumber" name="contactNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="assignedDriverId" class="form-label">Assigned Driver ID</label>
+                            <input type="number" class="form-control" id="assignedDriverId" name="assignedDriverId" required>
+                        </div>
+                        <button type="submit" class="btn btn-submit">Add Booking</button>
+                    </form>
                 </div>
             </div>
         </div>

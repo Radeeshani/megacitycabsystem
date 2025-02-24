@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.megacitycab.model.Booking" %>
-<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>View Bookings - Mega City Cab</title>
+    <title>Add Bill - Mega City Cab</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -17,19 +15,28 @@
         .container {
             margin-top: 2rem;
         }
-        .table-container {
+        .form-container {
             background: #fff;
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .table-container h2 {
+        .form-container h2 {
             margin-bottom: 1.5rem;
             color: #333;
             text-align: center;
         }
-        .btn-action {
-            margin: 0 0.25rem;
+        .btn-submit {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+        .btn-submit:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -103,41 +110,28 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="table-container">
-                    <h2>Booking List</h2>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Customer ID</th>
-                                <th>Pickup Location</th>
-                                <th>Destination</th>
-                                <th>Contact Number</th>
-                                <th>Assigned Driver ID</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
-                               for (Booking booking : bookings) { %>
-                                <tr>
-                                    <td><%= booking.getBookingId() %></td>
-                                    <td><%= booking.getCustomerId() %></td>
-                                    <td><%= booking.getPickupLocation() %></td>
-                                    <td><%= booking.getDestination() %></td>
-                                    <td><%= booking.getContactNumber() %></td>
-                                    <td><%= booking.getAssignedDriverId() %></td>
-                                    <td><%= booking.getStatus() %></td>
-                                    <td>
-                                        <a href="${pageContext.request.contextPath}/bookings?action=edit&id=<%= booking.getBookingId() %>" class="btn btn-primary btn-action">Edit</a>
-                                        <a href="${pageContext.request.contextPath}/bookings?action=delete&id=<%= booking.getBookingId() %>" class="btn btn-danger btn-action">Delete</a>
-                                    </td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+            <div class="col-md-6">
+                <div class="form-container">
+                    <h2>Add Bill</h2>
+                    <form action="${pageContext.request.contextPath}/bills" method="post">
+                        <div class="mb-3">
+                            <label for="bookingId" class="form-label">Booking ID</label>
+                            <input type="number" class="form-control" id="bookingId" name="bookingId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="totalAmount" class="form-label">Total Amount</label>
+                            <input type="number" step="0.01" class="form-control" id="totalAmount" name="totalAmount" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tax" class="form-label">Tax</label>
+                            <input type="number" step="0.01" class="form-control" id="tax" name="tax" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="discount" class="form-label">Discount</label>
+                            <input type="number" step="0.01" class="form-control" id="discount" name="discount" required>
+                        </div>
+                        <button type="submit" class="btn btn-submit">Add Bill</button>
+                    </form>
                 </div>
             </div>
         </div>
