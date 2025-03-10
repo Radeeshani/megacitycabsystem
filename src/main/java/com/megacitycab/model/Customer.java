@@ -6,8 +6,17 @@ public class Customer {
     private String address;
     private String NIC;
     private String phone;
+    private int userId;
 
     // Getters and Setters
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+    
     public int getCustomerId() {
         return customerId;
     }

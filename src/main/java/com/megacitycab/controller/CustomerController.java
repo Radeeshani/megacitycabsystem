@@ -1,4 +1,6 @@
 package com.megacitycab.controller;
+import com.megacitycab.service.UserService;
+import com.megacitycab.model.User; 
 
 import com.megacitycab.model.Customer;
 import com.megacitycab.service.CustomerService;
@@ -12,6 +14,7 @@ import java.sql.SQLException;
 
 @WebServlet("/customers")
 public class CustomerController extends HttpServlet {
+	private UserService userService = new UserService();
     private CustomerService customerService = new CustomerService();
 
     @Override
@@ -26,7 +29,10 @@ public class CustomerController extends HttpServlet {
                     try {
                         Customer customer = customerService.getCustomerById(editCustomerId);
                         if (customer != null) {
+                            // Fetch the associated user details
+                            User user = userService.getUserById(customer.getUserId());
                             request.setAttribute("customer", customer); // Set the customer object
+                            request.setAttribute("user", user); // Set the user object
                             request.getRequestDispatcher("/editCustomer.jsp").forward(request, response);
                         } else {
                             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Customer not found");
@@ -42,7 +48,7 @@ public class CustomerController extends HttpServlet {
                     int deleteCustomerId = Integer.parseInt(request.getParameter("id"));
                     try {
                         customerService.deleteCustomer(deleteCustomerId);
-                        response.sendRedirect("customers"); // Redirect to the customer list page
+                        response.sendRedirect("customers"); // Redirect to the customer list page after deletion
                     } catch (SQLException e) {
                         e.printStackTrace();
                         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error deleting customer");
@@ -100,23 +106,39 @@ public class CustomerController extends HttpServlet {
             }
         } else {
             // Handle add customer request
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
             String name = request.getParameter("name");
             String address = request.getParameter("address");
             String NIC = request.getParameter("nic");
             String phone = request.getParameter("phone");
 
-            Customer customer = new Customer();
-            customer.setName(name);
-            customer.setAddress(address);
-            customer.setNIC(NIC);
-            customer.setPhone(phone);
+            // Create User object
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setRole("customer"); // Default role for customers
+
+            // Create Customer object
+            Customer customer = new Customer(); 
+            customer.setName(name); 
+            customer.setAddress(address); 
+            customer.setNIC(NIC); 
+            customer.setPhone(phone); 
 
             try {
+                // Save user to the database
+                int userId = userService.addUser(user);
+
+                // Save customer to the database
+                customer.setUserId(userId); // Link customer to user
                 customerService.addCustomer(customer);
+
+                // Redirect to the customers list page
                 response.sendRedirect("customers");
             } catch (SQLException e) {
                 e.printStackTrace();
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error adding customer");
+                response.sendRedirect("addCustomer.jsp?error=1");
             }
         }
     }

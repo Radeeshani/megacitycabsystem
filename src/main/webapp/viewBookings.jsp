@@ -12,7 +12,31 @@
     <!-- Custom CSS -->
     <style>
         body {
-            background-color: #f8f9fa;
+            background: url('https://www.shutterstock.com/image-vector/taxi-service-abstract-banner-design-600nw-2506919915.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+        .navbar {
+            background-color: #ff8800; 
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+        .nav-link:hover {
+            color: #f8f9fa !important;
         }
         .container {
             margin-top: 2rem;
@@ -35,6 +59,7 @@
 </head>
 <body>
     <!-- Navbar -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="${pageContext.request.contextPath}/dashboard.jsp">Mega City Cab</a>
@@ -43,6 +68,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Manage Users Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUsers" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Manage Users
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownUsers">
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/addUser.jsp">Add User</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/users">View Users</a></li>
+                        </ul>
+                    </li>
                     <!-- Manage Customers Dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -69,30 +104,18 @@
                             Manage Cars
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/addCar.jsp">Add Car</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/cars?action=add">Add Car</a></li>
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/cars">View Cars</a></li>
                         </ul>
                     </li>
                     <!-- Manage Bookings Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Manage Bookings
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/addBooking.jsp">Add Booking</a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/bookings">View Bookings</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/bookings">Manage Bookings</a>
                     </li>
-                    <!-- Manage Bills Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Manage Bills
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/addBill.jsp">Add Bill</a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/bills">View Bills</a></li>
-                        </ul>
-                    </li>
+                    <!-- Manage Bills  -->
+                    <li class="nav-item">
+						    <a class="nav-link" href="${pageContext.request.contextPath}/bills">Manage Bills</a>
+						</li>
                 </ul>
                 <form action="${pageContext.request.contextPath}/login" method="get" class="d-flex">
                     <button type="submit" class="btn btn-outline-light">Logout</button>
@@ -109,12 +132,10 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Customer ID</th>
+                                <th>Customer</th>
                                 <th>Pickup Location</th>
                                 <th>Destination</th>
                                 <th>Contact Number</th>
-                                <th>Assigned Driver ID</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -123,16 +144,25 @@
                             <% List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
                                for (Booking booking : bookings) { %>
                                 <tr>
-                                    <td><%= booking.getBookingId() %></td>
-                                    <td><%= booking.getCustomerId() %></td>
+                                    <td><%= booking.getCustomerUsername() %></td>
                                     <td><%= booking.getPickupLocation() %></td>
                                     <td><%= booking.getDestination() %></td>
                                     <td><%= booking.getContactNumber() %></td>
-                                    <td><%= booking.getAssignedDriverId() %></td>
                                     <td><%= booking.getStatus() %></td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/bookings?action=edit&id=<%= booking.getBookingId() %>" class="btn btn-primary btn-action">Edit</a>
-                                        <a href="${pageContext.request.contextPath}/bookings?action=delete&id=<%= booking.getBookingId() %>" class="btn btn-danger btn-action">Delete</a>
+                                        <% if ("Pending".equals(booking.getStatus())) { %>
+                                            <!-- Show Complete and Cancel buttons only for Pending bookings -->
+                                            <form action="${pageContext.request.contextPath}/bookings" method="post" style="display: inline;">
+                                                <input type="hidden" name="action" value="complete">
+                                                <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
+                                                <button type="submit" class="btn btn-success btn-action">Complete</button>
+                                            </form>
+                                            <form action="${pageContext.request.contextPath}/bookings" method="post" style="display: inline;">
+                                                <input type="hidden" name="action" value="cancel">
+                                                <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
+                                                <button type="submit" class="btn btn-danger btn-action">Cancel</button>
+                                            </form>
+                                        <% } %>
                                     </td>
                                 </tr>
                             <% } %>

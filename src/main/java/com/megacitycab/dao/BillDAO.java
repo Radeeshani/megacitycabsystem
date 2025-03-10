@@ -13,13 +13,14 @@ public class BillDAO {
 
     // Add a new bill
     public void addBill(Bill bill) throws SQLException {
-        String sql = "INSERT INTO bills (booking_id, total_amount, tax, discount) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO bills (booking_id, total_amount, tax, discount, kilometers_traveled) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, bill.getBookingId());
             stmt.setDouble(2, bill.getTotalAmount());
             stmt.setDouble(3, bill.getTax());
             stmt.setDouble(4, bill.getDiscount());
+            stmt.setDouble(5, bill.getKilometersTraveled());
             stmt.executeUpdate();
         }
     }
@@ -38,6 +39,7 @@ public class BillDAO {
                 bill.setTotalAmount(rs.getDouble("total_amount"));
                 bill.setTax(rs.getDouble("tax"));
                 bill.setDiscount(rs.getDouble("discount"));
+                bill.setKilometersTraveled(rs.getDouble("kilometers_traveled"));
                 bills.add(bill);
             }
         }
@@ -58,6 +60,7 @@ public class BillDAO {
                     bill.setTotalAmount(rs.getDouble("total_amount"));
                     bill.setTax(rs.getDouble("tax"));
                     bill.setDiscount(rs.getDouble("discount"));
+                    bill.setKilometersTraveled(rs.getDouble("kilometers_traveled"));
                     return bill;
                 }
             }
@@ -67,14 +70,15 @@ public class BillDAO {
 
     // Update a bill
     public void updateBill(Bill bill) throws SQLException {
-        String sql = "UPDATE bills SET booking_id = ?, total_amount = ?, tax = ?, discount = ? WHERE bill_id = ?";
+        String sql = "UPDATE bills SET booking_id = ?, total_amount = ?, tax = ?, discount = ?, kilometers_traveled = ? WHERE bill_id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, bill.getBookingId());
             stmt.setDouble(2, bill.getTotalAmount());
             stmt.setDouble(3, bill.getTax());
             stmt.setDouble(4, bill.getDiscount());
-            stmt.setInt(5, bill.getBillId());
+            stmt.setDouble(5, bill.getKilometersTraveled());
+            stmt.setInt(6, bill.getBillId());
             stmt.executeUpdate();
         }
     }

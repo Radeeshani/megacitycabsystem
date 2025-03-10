@@ -9,8 +9,9 @@ public class Booking {
     private String destination;
     private String contactNumber;
     private Timestamp bookingDate;
-    private int assignedDriverId; // Foreign key to Driver
-    private String status; // Pending, Completed, Cancelled
+    private int assignedDriverId = 0; // Default value
+    private String status; 
+    private String customerUsername; // Added field for customer username
 
     // Getters and Setters
     public int getBookingId() {
@@ -75,5 +76,13 @@ public class Booking {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCustomerUsername() {
+        return customerUsername;
+    }
+
+    public void setCustomerUsername(String customerUsername) {
+        this.customerUsername = customerUsername;
     }
 }

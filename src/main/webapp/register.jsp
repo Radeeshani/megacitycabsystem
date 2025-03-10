@@ -11,20 +11,29 @@
     <style>
         body {
             background-color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
         }
-        .register-container {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 10px;
+        .container-custom {
+            width: 80%;
+            height: 80%;
+            display: flex;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
+            border-radius: 10px;
+            overflow: hidden;
         }
-        .register-container h2 {
+        .form-section {
+            width: 50%;
+            background-color: #fff;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .form-section h2 {
             margin-bottom: 1.5rem;
             color: #333;
             text-align: center;
@@ -35,35 +44,64 @@
         .btn-register {
             width: 100%;
             padding: 0.75rem;
-            background-color: #007bff;
+            background-color: #ff8800;
             border: none;
             color: #fff;
             font-size: 1rem;
             border-radius: 5px;
         }
         .btn-register:hover {
-            background-color: #0056b3;
+            background-color: #ff8800;
         }
         .error-message {
             color: #dc3545;
             text-align: center;
             margin-top: 1rem;
         }
+        .login-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .login-link a {
+            color: #ff8800;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        .image-section {
+            width: 50%;
+            background: url('https://media.istockphoto.com/id/869683836/vector/family-in-the-taxi-cab.jpg?s=612x612&w=0&k=20&c=PkgoKuNlukbxQA6d87Z_Rz7tFpugWCp2F9DRnX9YRiU=') center center/cover no-repeat;
+        }
     </style>
 </head>
 <body>
-    <div class="register-container">
+
+<div class="container-custom">
+    <!-- Image Section -->
+    <div class="image-section"></div>
+
+    <!-- Registration Form Section -->
+    <div class="form-section">
         <h2>Register</h2>
-        <!-- Display error message if registration fails -->
         <% if (request.getParameter("error") != null) { %>
             <div class="error-message">
                 Registration failed. Please try again.
             </div>
         <% } %>
-        <!-- Registration Form -->
-        <form action="register" method="post">
+        <form action="<%= request.getContextPath() %>/register" method="post">
+            <!-- User Details -->
             <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <!-- Customer Details -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
                 <input type="text" class="form-control" id="name" name="name" required>
             </div>
             <div class="mb-3">
@@ -78,20 +116,16 @@
                 <label for="phone" class="form-label">Phone</label>
                 <input type="text" class="form-control" id="phone" name="phone" required>
             </div>
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username" required>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
             <button type="submit" class="btn btn-register">Register</button>
         </form>
+        <div class="login-link">
+            Already have an account? <a href="login.jsp">Login</a>
+        </div>
     </div>
+</div>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

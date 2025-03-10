@@ -6,6 +6,7 @@ public class Bill {
     private double totalAmount;
     private double tax;
     private double discount;
+    private double kilometersTraveled; // New field
 
     // Getters and Setters
     public int getBillId() {
@@ -46,5 +47,13 @@ public class Bill {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public double getKilometersTraveled() {
+        return kilometersTraveled;
+    }
+
+    public void setKilometersTraveled(double kilometersTraveled) {
+        this.kilometersTraveled = kilometersTraveled;
     }
 }

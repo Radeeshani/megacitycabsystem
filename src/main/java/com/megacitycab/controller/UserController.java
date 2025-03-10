@@ -1,6 +1,8 @@
 package com.megacitycab.controller;
 
+import com.megacitycab.model.Customer;
 import com.megacitycab.model.User;
+import com.megacitycab.service.CustomerService;
 import com.megacitycab.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,6 +16,7 @@ import java.sql.SQLException;
 @WebServlet("/login")
 public class UserController extends HttpServlet {
     private UserService userService = new UserService();
+    private CustomerService customerService = new CustomerService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -25,7 +28,27 @@ public class UserController extends HttpServlet {
             if (user != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
-                response.sendRedirect("dashboard.jsp");
+
+                // Fetch customerId if the user is a customer
+                if (user.getRole().equals("customer")) {
+                    Customer customer = customerService.getCustomerByUserId(user.getUserId());
+                    if (customer != null) {
+                        session.setAttribute("customerId", customer.getCustomerId());
+                        // Redirect to CustomerHomeController to fetch bookings
+                        response.sendRedirect("customerHome");
+                        return;
+                    } else {
+                        response.sendRedirect("login.jsp?error=1");
+                        return;
+                    }
+                }
+
+                // Redirect based on role
+                if (user.getRole().equals("admin") || user.getRole().equals("staff")) {
+                    response.sendRedirect("dashboard.jsp");
+                } else {
+                    response.sendRedirect("login.jsp?error=1");
+                }
             } else {
                 response.sendRedirect("login.jsp?error=1");
             }

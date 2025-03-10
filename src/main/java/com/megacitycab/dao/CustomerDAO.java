@@ -12,17 +12,18 @@ import java.util.List;
 public class CustomerDAO {
 
     // Add a new customer
-    public void addCustomer(Customer customer) throws SQLException {
-        String sql = "INSERT INTO customers (name, address, NIC, phone) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, customer.getName());
-            stmt.setString(2, customer.getAddress());
-            stmt.setString(3, customer.getNIC());
-            stmt.setString(4, customer.getPhone());
-            stmt.executeUpdate();
-        }
-    }
+	public void addCustomer(Customer customer) throws SQLException {
+	    String sql = "INSERT INTO customers (name, address, NIC, phone, user_id) VALUES (?, ?, ?, ?, ?)";
+	    try (Connection conn = DBUtil.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setString(1, customer.getName());
+	        stmt.setString(2, customer.getAddress());
+	        stmt.setString(3, customer.getNIC());
+	        stmt.setString(4, customer.getPhone());
+	        stmt.setInt(5, customer.getUserId());
+	        stmt.executeUpdate();
+	    }
+	}
 
     // Get all customers
     public List<Customer> getAllCustomers() throws SQLException {
@@ -58,6 +59,7 @@ public class CustomerDAO {
                     customer.setAddress(rs.getString("address"));
                     customer.setNIC(rs.getString("NIC"));
                     customer.setPhone(rs.getString("phone"));
+                    customer.setUserId(rs.getInt("user_id")); 
                     return customer;
                 }
             }
@@ -87,5 +89,26 @@ public class CustomerDAO {
             stmt.setInt(1, customerId);
             stmt.executeUpdate();
         }
+    }
+    
+    public Customer getCustomerByUserId(int userId) throws SQLException {
+        String sql = "SELECT * FROM customers WHERE user_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Customer customer = new Customer();
+                    customer.setCustomerId(rs.getInt("customer_id"));
+                    customer.setName(rs.getString("name"));
+                    customer.setAddress(rs.getString("address"));
+                    customer.setNIC(rs.getString("NIC"));
+                    customer.setPhone(rs.getString("phone"));
+                    customer.setUserId(rs.getInt("user_id"));
+                    return customer;
+                }
+            }
+        }
+        return null;
     }
 }
